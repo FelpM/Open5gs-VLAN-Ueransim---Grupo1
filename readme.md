@@ -41,8 +41,8 @@ echo "8" > /sys/class/net/<nome da interface>/device/sriov_numvfs
 Para maior desempenho e segurança cada uma das interfaces criadas podem ser dedicadas a cada uma das funções do core que se comunicam externamente. Através de tags nas interfaces virtuais que serão posteriormente dedicadas ao core é possível segmentar o tráfego do UPF, AMF, OAM e Iternet. Neste cenário especifíco serão usadas o indicador **int** como nome da interface principal das vlans e **br101** como interface bridge que vai prover acesso a internet, no qual será dedicado as 4 primeiras interfaces criadas no ambiente. Sendo assim a tabela fica da seguinte forma:
 |AMF|UPF|OAM|Internet|
 |---|---|---|--------|
-|intv0|intv1|intv2|br101|
-|VLAN60|VLAN70|VLAN90|BRGD|
+|intv0|intv1|br101|intv3|
+|VLAN60|VLAN70|brdg|VLAN90|
 
 A inclusão de tags, de uma forma que possam ser dedicada a VM sem perder sua configuração dever ser realizada por meio de VFs com os seguintes comandos:
 ```
@@ -217,7 +217,7 @@ curl -fsSL https://open5gs.org/open5gs/assets/webui/install | sudo -E bash -
 ```
 Para alterar sua forma de acesso uma variável no arquivo **/lib/systemd/system/open5gs-webui.service** deve ser acrescentada. Como o OAM receberá acesso via vlan 90, indicaremos o ip estático desta rede para ser acessível de forma remota. A variavél acrescentada no ambiente em questão será a seguinte: 
 ```
-Environment=HOSTNAME=10.7.90.186
+Environment=HOSTNAME=10.7.101.253
 ```
 Assim como nas funções de rede, para aplicar a modificações é necessário reiniciar o serviço.
 ```
